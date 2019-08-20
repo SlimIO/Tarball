@@ -3,13 +3,13 @@
 // Require Node.js Dependencies
 const zlib = require("zlib");
 const { tmpdir } = require("os");
-const { join, extname } = require("path");
+const { join, extname, relative, dirname } = require("path");
 const { pipeline } = require("stream");
 const { promisify } = require("util");
 const {
     createWriteStream,
     createReadStream,
-    promises: { mkdir, stat }
+    promises: { mkdir, stat, unlink }
 } = require("fs");
 
 // Require Third-party Dependencies
@@ -24,10 +24,73 @@ const { getFilesRecursive } = require("./src/utils");
 const pipestreams = promisify(pipeline);
 
 /**
+ * @async
  * @function extract
+ * @param {!string} location location
+ * @param {object} [options] output archive
+ * @param {string} [options.destination] archive destination
+ * @param {boolean} [options.deleteTar=false] delete tar when everything is done
+ * @param {boolean} [options.deleteDestinationOnFail=false] delete the destination if something fail.
+ * @returns {Promise<void>}
+ *
+ * @throws {TypeError}
+ * @throws {Error}
  */
-function extract() {
-    // TBC
+async function extract(location, options = Object.create(null)) {
+    if (typeof location !== "string") {
+        throw new TypeError("location must be a string");
+    }
+    if (extname(location) !== ".tar") {
+        throw new Error("location extension must be .tar");
+    }
+    const { destination, deleteTar = false, deleteDestinationOnFail = false } = options;
+
+    if (typeof destination !== "string") {
+        throw new TypeError("destination must be a string");
+    }
+
+    // Create temporary & destination location
+    const tempLocation = join(tmpdir(), uuid());
+    await Promise.all([
+        mkdir(tempLocation, { recursive: true }),
+        mkdir(destination, { recursive: true })
+    ]);
+
+    try {
+        await pipestreams(createReadStream(location), tar.extract(tempLocation));
+
+        const streamPromises = [];
+        const memcache = new Set();
+        for await (const [file, fileLocation] of getFilesRecursive(tempLocation)) {
+            const rel = dirname(relative(tempLocation, fileLocation));
+            if (rel !== "." && !memcache.has(rel)) {
+                await mkdir(join(destination, rel), { recursive: true });
+                memcache.add(rel);
+            }
+
+            const pendingPromise = pipestreams(
+                createReadStream(fileLocation),
+                zlib.createBrotliDecompress(),
+                createWriteStream(join(destination, rel, file))
+            );
+            streamPromises.push(pendingPromise);
+        }
+
+        await Promise.all(streamPromises);
+        if (deleteTar) {
+            await unlink(location);
+        }
+    }
+    catch (err) {
+        if (deleteDestinationOnFail) {
+            await premove(destination);
+        }
+
+        throw err;
+    }
+    finally {
+        await premove(tempLocation);
+    }
 }
 
 /**
@@ -40,6 +103,7 @@ function extract() {
  * @returns {Promise<void>}
  *
  * @throws {TypeError}
+ * @throws {Error}
  */
 async function pack(location, options = Object.create(null)) {
     if (typeof location !== "string") {
@@ -62,15 +126,22 @@ async function pack(location, options = Object.create(null)) {
 
     try {
         const streamPromises = [];
-        for await (const file of getFilesRecursive(location)) {
+        const memcache = new Set();
+        for await (const [file, fileLocation] of getFilesRecursive(location)) {
             if (include.size > 0 && !include.has(file)) {
                 continue;
             }
 
+            const rel = dirname(relative(location, fileLocation));
+            if (rel !== "." && !memcache.has(rel)) {
+                await mkdir(join(tempLocation, rel), { recursive: true });
+                memcache.add(rel);
+            }
+
             const pendingPromise = pipestreams(
-                createReadStream(join(location, file)),
+                createReadStream(fileLocation),
                 zlib.createBrotliCompress(),
-                createWriteStream(join(tempLocation, file))
+                createWriteStream(join(tempLocation, rel, file))
             );
             streamPromises.push(pendingPromise);
         }

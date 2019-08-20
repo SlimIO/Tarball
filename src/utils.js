@@ -28,7 +28,7 @@ async function* getFilesRecursive(dir) {
         }
 
         if (dirent.isFile()) {
-            yield dirent.name;
+            yield [dirent.name, join(dir, dirent.name)];
         }
         else if (dirent.isDirectory()) {
             yield* getFilesRecursive(join(dir, dirent.name));
