@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node index.js",
         "prepublishOnly": "pkg-ok",
-        "test": "cross-env psp && ava --verbose",
+        "test": "cross-env psp && node test/test.js",
         "doc": "jsdoc -c ./jsdoc.json -r -R ./README.md -P ./package.json --verbose",
         "coverage": "nyc npm test",
         "report": "nyc report --reporter=html"
@@ -41,14 +41,14 @@
         "@commitlint/config-conventional": "^8.1.0",
         "@escommunity/minami": "^1.0.0",
         "@slimio/eslint-config": "^3.0.2",
-        "ava": "^2.3.0",
+        "@slimio/psp": "^0.7.0",
+        "cross-env": "^5.2.0",
         "eslint": "^6.2.0",
         "husky": "^3.0.4",
+        "japa": "^2.0.10",
         "jsdoc": "^3.6.3",
-        "pkg-ok": "^2.3.1",
-        "cross-env": "^5.2.0",
-        "@slimio/psp": "^0.7.0",
-        "nyc": "^14.1.1"
+        "nyc": "^14.1.1",
+        "pkg-ok": "^2.3.1"
     },
     "engines": {
         "node": ">=10"
