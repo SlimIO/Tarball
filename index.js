@@ -27,8 +27,8 @@ const pipestreams = promisify(pipeline);
  * @async
  * @function extract
  * @param {!string} location location
+ * @param {!string} destination archive destination
  * @param {object} [options] output archive
- * @param {string} [options.destination] archive destination
  * @param {boolean} [options.deleteTar=false] delete tar when everything is done
  * @param {boolean} [options.deleteDestinationOnFail=false] delete the destination if something fail.
  * @returns {Promise<void>}
@@ -36,18 +36,17 @@ const pipestreams = promisify(pipeline);
  * @throws {TypeError}
  * @throws {Error}
  */
-async function extract(location, options = Object.create(null)) {
+async function extract(location, destination, options = Object.create(null)) {
     if (typeof location !== "string") {
         throw new TypeError("location must be a string");
+    }
+    if (typeof destination !== "string") {
+        throw new TypeError("destination must be a string");
     }
     if (extname(location) !== ".tar") {
         throw new Error("location extension must be .tar");
     }
-    const { destination, deleteTar = false, deleteDestinationOnFail = false } = options;
-
-    if (typeof destination !== "string") {
-        throw new TypeError("destination must be a string");
-    }
+    const { deleteTar = false, deleteDestinationOnFail = false } = options;
 
     // Create temporary & destination location
     const tempLocation = join(tmpdir(), uuid());
@@ -97,27 +96,27 @@ async function extract(location, options = Object.create(null)) {
  * @async
  * @function pack
  * @param {!string} location location
+ * @param {!string} destination archive destination
  * @param {object} [options] output archive
- * @param {string} [options.destination] archive destination
  * @param {Set<string>} [options.include]
  * @returns {Promise<void>}
  *
  * @throws {TypeError}
  * @throws {Error}
  */
-async function pack(location, options = Object.create(null)) {
+async function pack(location, destination, options = Object.create(null)) {
     if (typeof location !== "string") {
         throw new TypeError("location must be a string");
     }
-    const locationSt = await stat(location);
-    if (!locationSt.isDirectory()) {
-        throw new Error("location must be a directory!");
-    }
-    const { destination, include = new Set() } = options;
-
     if (typeof destination !== "string") {
         throw new TypeError("destination must be a string");
     }
+
+    if (!(await stat(location)).isDirectory()) {
+        throw new Error("location must be a directory!");
+    }
+
+    const { include = new Set() } = options;
     const destinationRw = extname(destination) === ".tar" ? destination : `${destination}.tar`;
 
     // Create temporary location
