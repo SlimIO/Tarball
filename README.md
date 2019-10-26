@@ -6,7 +6,7 @@
 SlimIO archive (for addons and modules) tarball packer/extractor.
 
 ## Requirements
-- [Node.js](https://nodejs.org/en/) v10 or higher
+- [Node.js](https://nodejs.org/en/) v12 or higher
 
 ## Getting Started
 
