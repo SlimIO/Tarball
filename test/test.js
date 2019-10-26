@@ -4,12 +4,11 @@
 const { join } = require("path");
 const {
     existsSync, readFileSync,
-    promises: { access, unlink }
+    promises: { access, unlink, rmdir }
 } = require("fs");
 
 // Require Third-party Dependencies
 const test = require("japa");
-const premove = require("premove");
 
 // Require Internal Dependencies
 const { getFilesRecursive } = require("../src/utils");
@@ -67,6 +66,6 @@ test("pack myArchive with include and extract", async(assert) => {
         }
     }
     finally {
-        await premove(extractDest);
+        await rmdir(extractDest, { recursive: true });
     }
 });
