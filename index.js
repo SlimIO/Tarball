@@ -9,12 +9,11 @@ const { promisify } = require("util");
 const {
     createWriteStream,
     createReadStream,
-    promises: { mkdir, stat, unlink }
+    promises: { mkdir, stat, unlink, rmdir }
 } = require("fs");
 
 // Require Third-party Dependencies
 const tar = require("tar-fs");
-const premove = require("premove");
 const uuid = require("uuid/v4");
 
 // Require Internal Dependencies
@@ -82,13 +81,13 @@ async function extract(location, destination, options = Object.create(null)) {
     }
     catch (err) {
         if (deleteDestinationOnFail) {
-            await premove(destination);
+            await rmdir(destination, { recursive: true });
         }
 
         throw err;
     }
     finally {
-        await premove(tempLocation);
+        await rmdir(tempLocation, { recursive: true });
     }
 }
 
@@ -149,7 +148,7 @@ async function pack(location, destination, options = Object.create(null)) {
         await pipestreams(tar.pack(tempLocation), createWriteStream(destinationRw));
     }
     finally {
-        await premove(tempLocation);
+        await rmdir(tempLocation, { recursive: true });
     }
 }
 
