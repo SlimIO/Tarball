@@ -4,6 +4,7 @@
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![dep](https://img.shields.io/david/SlimIO/Tarball)
 ![size](https://img.shields.io/github/languages/code-size/SlimIO/tarball)
+[![Build Status](https://travis-ci.com/SlimIO/Tarball.svg?branch=master)](https://travis-ci.com/SlimIO/Tarball)
 
 SlimIO archive (for addons and modules) tarball packer/extractor.
 
