@@ -69,3 +69,63 @@ test("pack myArchive with include and extract", async(assert) => {
         await rmdir(extractDest, { recursive: true });
     }
 });
+
+test("extract() TypeError", async(assert) => {
+    assert.plan(2);
+
+    try {
+        await extract(10);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "TypeError");
+    }
+
+    try {
+        await extract("./dir", 10);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "TypeError");
+    }
+});
+
+test("pack() TypeError", async(assert) => {
+    assert.plan(2);
+
+    try {
+        await pack(10);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "TypeError");
+    }
+
+    try {
+        await pack("./dir", 10);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "TypeError");
+    }
+});
+
+test("extract location argument extension must be .tar", async(assert) => {
+    assert.plan(2);
+
+    try {
+        await extract("./dir", __dirname);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "Error");
+        assert.strictEqual(error.message, "location extension must be .tar");
+    }
+});
+
+test("pack location must be a directory", async(assert) => {
+    assert.plan(2);
+
+    try {
+        await pack(join(FIXTURES, "myArchive", "test.txt"), __dirname);
+    }
+    catch (error) {
+        assert.strictEqual(error.name, "Error");
+        assert.strictEqual(error.message, "location must be a directory!");
+    }
+});

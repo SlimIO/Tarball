@@ -80,6 +80,7 @@ async function extract(location, destination, options = Object.create(null)) {
         }
     }
     catch (err) {
+        /* istanbul ignore next */
         if (deleteDestinationOnFail) {
             await rmdir(destination, { recursive: true });
         }
