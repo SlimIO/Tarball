@@ -4,6 +4,7 @@
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![dep](https://img.shields.io/david/SlimIO/Tarball)
 ![size](https://img.shields.io/github/languages/code-size/SlimIO/tarball)
+![Known Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@slimio/tarball)
 [![Build Status](https://travis-ci.com/SlimIO/Tarball.svg?branch=master)](https://travis-ci.com/SlimIO/Tarball)
 [![Greenkeeper badge](https://badges.greenkeeper.io/SlimIO/Tarball.svg)](https://greenkeeper.io/)
 
