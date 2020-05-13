@@ -32,7 +32,7 @@
     },
     "homepage": "https://github.com/SlimIO/Tarball#readme",
     "dependencies": {
-        "tar-fs": "^2.0.0",
+        "tar-fs": "^2.1.0",
         "uuid": "^3.3.3"
     },
     "devDependencies": {
