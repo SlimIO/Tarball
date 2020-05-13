@@ -78,7 +78,7 @@ By default **deleteTar** and **deleteDestinationOnFail** are equal to **false**.
 |Name|Refactoring|Security Risk|Usage|
 |---|---|---|---|
 |[tar-fs](https://github.com/mafintosh/tar-fs)|Minor|High|Pack and extract .tar archive|
-|[uuid](https://github.com/kelektiv/node-uuid#readme)|Minor|Low|Generate unique id for temporary filename|
+|[@lukeed/uuid](https://github.com/lukeed/uuid#readme)|Minor|Low|Generate unique id for temporary filename|
 
 ## License
 MIT

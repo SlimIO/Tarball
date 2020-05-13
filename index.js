@@ -14,7 +14,7 @@ const {
 
 // Require Third-party Dependencies
 const tar = require("tar-fs");
-const uuid = require("uuid/v4");
+const uuid = require("@lukeed/uuid");
 
 // Require Internal Dependencies
 const { getFilesRecursive } = require("./src/utils");
