@@ -6,7 +6,6 @@
 ![size](https://img.shields.io/github/languages/code-size/SlimIO/tarball)
 ![Known Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/@slimio/tarball)
 [![Build Status](https://travis-ci.com/SlimIO/Tarball.svg?branch=master)](https://travis-ci.com/SlimIO/Tarball)
-[![Greenkeeper badge](https://badges.greenkeeper.io/SlimIO/Tarball.svg)](https://greenkeeper.io/)
 
 SlimIO archive (for addons and modules) tarball packer/extractor.
 
