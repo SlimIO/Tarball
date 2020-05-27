@@ -31,6 +31,7 @@
         "url": "https://github.com/SlimIO/Tarball/issues"
     },
     "homepage": "https://github.com/SlimIO/Tarball#readme",
+    "files": [],
     "dependencies": {
         "@lukeed/uuid": "^1.0.1",
         "tar-fs": "^2.1.0"
