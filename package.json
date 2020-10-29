@@ -33,7 +33,7 @@
     "homepage": "https://github.com/SlimIO/Tarball#readme",
     "files": [],
     "dependencies": {
-        "@lukeed/uuid": "^1.0.1",
+        "@lukeed/uuid": "^2.0.0",
         "tar-fs": "^2.1.0"
     },
     "devDependencies": {
